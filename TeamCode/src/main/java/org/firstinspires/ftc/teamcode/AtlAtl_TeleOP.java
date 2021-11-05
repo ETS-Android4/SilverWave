@@ -141,9 +141,9 @@ public class AtlAtl_TeleOP extends OpMode
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
         leftFrontPower   = drive - strafe - turn;
-        rightFrontPower  = drive - strafe + turn;
+        rightFrontPower  = -drive - strafe - turn;
         leftBackPower    = drive + strafe - turn;
-        rightBackPower   = drive + strafe + turn;
+        rightBackPower   = -drive + strafe - turn;
 
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
@@ -177,5 +177,5 @@ public class AtlAtl_TeleOP extends OpMode
     }
 
 }
-//TEST Nikhil 1
+//TEST Nikhil 18
 
