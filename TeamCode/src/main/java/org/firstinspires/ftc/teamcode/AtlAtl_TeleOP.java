@@ -158,7 +158,7 @@ public class AtlAtl_TeleOP extends OpMode
 
 
         if(carouselMove) {
-            carouselPower = 0.8;
+            carouselPower = 0.6;
         }
         else {
             carouselPower = 0;
@@ -168,7 +168,7 @@ public class AtlAtl_TeleOP extends OpMode
 
         if (maxValue > 1) {
             leftFrontPower /= maxValue;
-           // rightFrontPower /= maxValue;
+            rightFrontPower /= maxValue;
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
             // carouselPower /= maxValue; --> not necessary
