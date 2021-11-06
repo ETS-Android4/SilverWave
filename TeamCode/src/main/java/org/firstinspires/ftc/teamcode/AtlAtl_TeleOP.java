@@ -60,7 +60,7 @@ public class AtlAtl_TeleOP extends OpMode
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotorEx leftFrontDrive = null;
-    private DcMotorEx rightFrontDrive = null;
+   // private DcMotorEx rightFrontDrive = null; --> commented out to test carousel
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx carousel = null;
@@ -80,7 +80,7 @@ public class AtlAtl_TeleOP extends OpMode
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front");
-        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
+       // rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
         leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
         carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
@@ -90,7 +90,7 @@ public class AtlAtl_TeleOP extends OpMode
 
         rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        //rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
 
@@ -99,7 +99,7 @@ public class AtlAtl_TeleOP extends OpMode
 
         //Setting Zero Power behaviour
         leftFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        //rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -135,7 +135,7 @@ public class AtlAtl_TeleOP extends OpMode
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftFrontPower;
-        double rightFrontPower;
+      //  double rightFrontPower;
         double leftBackPower;
         double rightBackPower;
         double carouselPower;
@@ -152,7 +152,7 @@ public class AtlAtl_TeleOP extends OpMode
         boolean carouselMove = gamepad1.right_bumper;
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
         leftFrontPower   = drive - strafe - turn;
-        rightFrontPower  = -drive - strafe - turn;
+        //rightFrontPower  = -drive - strafe - turn;
         leftBackPower    = drive + strafe - turn;
         rightBackPower   = -drive + strafe - turn;
 
@@ -164,11 +164,11 @@ public class AtlAtl_TeleOP extends OpMode
             carouselPower = 0;
         }
 
-        double maxValue = Math.max(Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
+        double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(leftFrontPower /* CHANGE LATER to rightFrontPower*/)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
         if (maxValue > 1) {
             leftFrontPower /= maxValue;
-            rightFrontPower /= maxValue;
+           // rightFrontPower /= maxValue;
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
             // carouselPower /= maxValue; --> not necessary
@@ -180,13 +180,13 @@ public class AtlAtl_TeleOP extends OpMode
 
         // Send calculated velocity to wheels
         leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
+        //rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
+        //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
     }
 
     /*
