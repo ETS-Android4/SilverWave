@@ -139,7 +139,8 @@ public class AtlAtl_TeleOP extends OpMode
         double leftBackPower;
         double rightBackPower;
         double carouselPower;
-        double carouselPowerDouble;
+        // double carouselPowerDouble; --> not being used anywhere else in the code?
+
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -149,14 +150,19 @@ public class AtlAtl_TeleOP extends OpMode
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
-        double CarouselMoveInt = (carouselMove) ? 1 : 0;
+        // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
         leftFrontPower   = drive - strafe - turn;
         rightFrontPower  = -drive - strafe - turn;
         leftBackPower    = drive + strafe - turn;
         rightBackPower   = -drive + strafe - turn;
-        carouselPower = CarouselMoveInt;
 
 
+        if(carouselMove) {
+            carouselPower = 1;
+        }
+        else {
+            carouselPower = 0;
+        }
 
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
@@ -165,7 +171,7 @@ public class AtlAtl_TeleOP extends OpMode
             rightFrontPower /= maxValue;
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
-            carouselPower /= maxValue;
+            // carouselPower /= maxValue; --> not necessary
         }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
