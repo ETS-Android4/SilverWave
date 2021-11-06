@@ -63,6 +63,9 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx rightFrontDrive = null;
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightBackDrive = null;
+    private DcMotorEx carousel = null;
+
+
 
 
 
@@ -80,6 +83,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
         leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
+        carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -88,6 +92,7 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        carousel.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -97,6 +102,8 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
 
         //setting PID coefficients
         //leftFrontDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
@@ -131,7 +138,8 @@ public class AtlAtl_TeleOP extends OpMode
         double rightFrontPower;
         double leftBackPower;
         double rightBackPower;
-
+        double carouselPower;
+        double carouselPowerDouble;
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -140,10 +148,15 @@ public class AtlAtl_TeleOP extends OpMode
         double strafe = gamepad1.left_stick_x;
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
+        boolean carouselMove = gamepad1.right_bumper;
+        double CarouselMoveInt = (carouselMove) ? 1 : 0;
         leftFrontPower   = drive - strafe - turn;
         rightFrontPower  = -drive - strafe - turn;
         leftBackPower    = drive + strafe - turn;
         rightBackPower   = -drive + strafe - turn;
+        carouselPower = CarouselMoveInt;
+
+
 
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
@@ -152,6 +165,7 @@ public class AtlAtl_TeleOP extends OpMode
             rightFrontPower /= maxValue;
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
+            carouselPower /= maxValue;
         }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -163,7 +177,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
-
+        carousel.setPower(carouselPower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
