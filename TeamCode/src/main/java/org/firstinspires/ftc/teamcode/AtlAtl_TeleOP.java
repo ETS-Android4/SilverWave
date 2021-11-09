@@ -83,7 +83,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
         leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
-        carousel  = hardwareMap.get(DcMotorEx.class, "carousel1");
+        carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
