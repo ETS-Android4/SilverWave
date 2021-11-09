@@ -180,7 +180,7 @@ public class AtlAtl_TeleOP extends OpMode
 
         // Send calculated velocity to wheels
         leftFrontDrive.setPower(leftFrontPower);
-        //rightFrontDrive.setPower(rightFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
