@@ -151,10 +151,10 @@ public class AtlAtl_TeleOP extends OpMode
         double drive  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
-        leftFrontPower   = drive - strafe + turn;
-        leftBackPower    = drive - strafe - turn;
-        rightFrontPower  = drive + strafe + turn;
-        rightBackPower   = drive + strafe - turn;
+        leftFrontPower   = drive + strafe - turn;
+        leftBackPower    = drive + strafe + turn;
+        rightFrontPower  = drive - strafe - turn;
+        rightBackPower   = drive - strafe + turn;
 
 
         if(carouselMove) {
