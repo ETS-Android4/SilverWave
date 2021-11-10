@@ -146,9 +146,9 @@ public class AtlAtl_TeleOP extends OpMode
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = gamepad1.left_stick_y;
+        double turn = gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
-        double turn  =  gamepad1.right_stick_x;
+        double drive  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
         leftFrontPower   = drive + strafe + turn;
