@@ -64,6 +64,7 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx carousel = null;
+    private DcMotorEx arm = null;
 
 
 
@@ -84,6 +85,7 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
         carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -93,6 +95,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
+        arm.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -103,7 +106,7 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
+        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         //setting PID coefficients
         //leftFrontDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
@@ -139,6 +142,7 @@ public class AtlAtl_TeleOP extends OpMode
         double leftBackPower;
         double rightBackPower;
         double carouselPower;
+        double armPower;
         // double carouselPowerDouble; --> not being used anywhere else in the code?
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -151,22 +155,36 @@ public class AtlAtl_TeleOP extends OpMode
         double drive  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
         boolean carouselMoveLeft = gamepad1.left_bumper;
+        boolean armMove = gamepad2.right_bumper:
+        boolean armMoveLeft = gamepad2.left_bumper;
+
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
         leftFrontPower   = drive + strafe - turn;
         leftBackPower    = drive + strafe + turn;
         rightFrontPower  = drive - strafe - turn;
         rightBackPower   = drive - strafe + turn;
 
-
+        // Carousel True and False Conditions
         if(carouselMove) {
             carouselPower = 0.7;
         }
         else if(carouselMoveLeft) {
-            carouselPower = -0.7; 
+            carouselPower = -0.7;
         }
         else {
             carouselPower = 0;
         }
+
+        if(armMove) {
+            armPower = 0.7;
+        }
+        else if(armMoveLeft) {
+            armPower = -0.7;
+        }
+        else {
+            armPower = 0;
+        }
+
 
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
@@ -188,9 +206,10 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
+        arm.setPower(armPower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
+        telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
     }
 
     /*
@@ -201,5 +220,5 @@ public class AtlAtl_TeleOP extends OpMode
     }
 
 }
-//TEST Nikhil 18
+
 
