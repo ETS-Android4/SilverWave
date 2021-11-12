@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -65,9 +66,12 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx carousel = null;
     private DcMotorEx arm = null;
+    private Servo extender = null;
 
-
-
+    // servo initialization
+    public final static double EXTENDER_HOME = 0.0;  // starting position for extender, can be tuned later
+    public final static double EXTENDER_MIN_RANGE = 0.0; // min position for servo
+    public final static double EXTENDER_MAX_RANGE = 1.0; // max position for servo
 
 
     /*
@@ -86,7 +90,6 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
         carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
-
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
@@ -107,6 +110,11 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+
+        // Setting and Initializing Servo Positions
+        extender = hardwareMap.servo.get("extender");
+        extender.setPosition(EXTENDER_HOME);
 
         //setting PID coefficients
         //leftFrontDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
@@ -143,6 +151,7 @@ public class AtlAtl_TeleOP extends OpMode
         double rightBackPower;
         double carouselPower;
         double armPower;
+        final double EXTENDER_SPEED = 0.01;
         // double carouselPowerDouble; --> not being used anywhere else in the code?
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -157,6 +166,8 @@ public class AtlAtl_TeleOP extends OpMode
         boolean carouselMoveLeft = gamepad1.left_bumper;
         boolean armMove = gamepad2.right_bumper:
         boolean armMoveLeft = gamepad2.left_bumper;
+        double extendermove = gamepad2.left_stick_x;
+
 
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
         leftFrontPower   = drive + strafe - turn;
@@ -207,6 +218,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
         arm.setPower(armPower);
+        extender.setPosition(extendermove);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
