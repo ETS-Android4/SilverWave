@@ -164,7 +164,7 @@ public class AtlAtl_TeleOP extends OpMode
         double drive  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
         boolean carouselMoveLeft = gamepad1.left_bumper;
-        boolean armMove = gamepad2.right_bumper:
+        boolean armMove = gamepad2.right_bumper;
         boolean armMoveLeft = gamepad2.left_bumper;
         double extendermove = gamepad2.left_stick_x;
 
@@ -205,7 +205,7 @@ public class AtlAtl_TeleOP extends OpMode
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
             // carouselPower /= maxValue; --> not necessary
-            intakePower /= maxValue;
+            armPower /= maxValue;
         }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
