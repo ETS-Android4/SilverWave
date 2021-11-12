@@ -186,7 +186,6 @@ public class AtlAtl_TeleOP extends OpMode
             carouselPower = 0;
         }
 
-        // Arm True and False Conditions
         if(armMove) {
             armPower = 0.7;
         }
@@ -206,7 +205,7 @@ public class AtlAtl_TeleOP extends OpMode
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
             // carouselPower /= maxValue; --> not necessary
-
+            armPower /= maxValue;
         }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
