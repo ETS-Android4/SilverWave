@@ -77,89 +77,33 @@ public class AtlAtl_Auton extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-            telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initialized");
 
-            // Initialize the hardware variables. Note that the strings used here as parameters
-            // to 'get' must correspond to the names assigned during the robot configuration
-            // step (using the FTC Robot Controller app on the phone).
-            leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front");
-            rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
-            leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
-            rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
-            carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
-            arm = hardwareMap.get(DcMotorEx.class, "arm");
-            // Most robots need the motor on one side to be reversed to drive forward
-            // Reverse the motor that runs backwards when connected directly to the battery
+        // Initialize the hardware variables. Note that the strings used here as parameters
+        // to 'get' must correspond to the names assigned during the robot configuration
+        // step (using the FTC Robot Controller app on the phone).
+        leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front");
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back");
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
+        carousel = hardwareMap.get(DcMotorEx.class, "carousel");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
 
-            rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
-            leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
-            rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
-            leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
-            carousel.setDirection(DcMotorEx.Direction.FORWARD);
-            arm.setDirection(DcMotorEx.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        carousel.setDirection(DcMotorEx.Direction.FORWARD);
+        arm.setDirection(DcMotorEx.Direction.FORWARD);
 
-            // Tell the driver that initialization is complete.
-            telemetry.addData("Status", "Initialized");
+        // Tell the driver that initialization is complete.
+        telemetry.addData("Status", "Initialized");
 // robot code movement
-            waitForStart();
-            DriveForwardTime(1,4000);
-            TurnLeftTime(1,500);
+        waitForStart();
+        Auton_methods.AtlAtl_Auton vector = new Auton_methods.AtlAtl_Auton();
+        vector.DriveForwardTime(2.0,3);
+
         }
-    public void DriveForward(double power){
-        rightBackDrive.setPower(power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        leftFrontDrive.setPower(power);
-
     }
-    public void DriveBackward(double power){
-        rightBackDrive.setPower(power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        leftFrontDrive.setPower(power);
-    }
-    public void turnRight(double power){
-        rightBackDrive.setPower(-power);
-        rightFrontDrive.setPower(-power);
-        leftBackDrive.setPower(power);
-        leftFrontDrive.setPower(power);
-    }
-    public void turnLeft(double power){
-        rightBackDrive.setPower(power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(-power);
-        leftFrontDrive.setPower(-power);
-    }
-    public void strafeRight(double power){
-        rightBackDrive.setPower(power);
-        rightFrontDrive.setPower(-power);
-        leftBackDrive.setPower(-power);
-        leftFrontDrive.setPower(power);
-    }
-    public void strafeLeft(double power){
-        rightBackDrive.setPower(-power);
-        rightFrontDrive.setPower(power);
-        leftBackDrive.setPower(-power);
-        leftFrontDrive.setPower(power);
-    }
-    public void carouselTurn(double power){
-        carousel.setPower(power);
-    }
-
-    public void DriveForwardTime(double power,long time) throws InterruptedException{
-        DriveForward(power);
-        Thread.sleep(time);
-    }
-    public void StopDriving(){
-        DriveForward(0);
-    }
-    public void TurnLeftTime(double power, long time) throws InterruptedException{
-        turnLeft(power);
-        Thread.sleep(time);
-
-    }
-    public void TurnRightTime(double power, long time) throws InterruptedException{
-        turnRight(power);
-        Thread.sleep((time));
-    }
-}
