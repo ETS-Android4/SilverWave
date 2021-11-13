@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
@@ -48,34 +50,49 @@ public class AtlAtl_Auton {
      * This file illustrates the concept of driving a path based on time.
      * It uses the common Pushbot hardware class to define the drive on the robot.
      * The code is structured as a LinearOpMode
-     *
+     * <p>
      * The code assumes that you do NOT have encoders on the wheels,
-     *   otherwise you would use: PushbotAutoDriveByEncoder;
-     *
-     *   The desired path in this example is:
-     *   - Drive forward for 3 seconds
-     *   - Spin right for 1.3 seconds
-     *   - Drive Backwards for 1 Second
-     *   - Stop and close the claw.
-     *
-     *  The code is written in a simple form with no optimizations.
-     *  However, there are several ways that this type of sequence could be streamlined,
-     *
+     * otherwise you would use: PushbotAutoDriveByEncoder;
+     * <p>
+     * The desired path in this example is:
+     * - Drive forward for 3 seconds
+     * - Spin right for 1.3 seconds
+     * - Drive Backwards for 1 Second
+     * - Stop and close the claw.
+     * <p>
+     * The code is written in a simple form with no optimizations.
+     * However, there are several ways that this type of sequence could be streamlined,
+     * <p>
      * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
      * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
      */
 
-    @Autonomous(name="Pushbot: Auto Drive By Time", group="Pushbot")
+    @Autonomous(name = "Pushbot: Auto Drive By Time", group = "Pushbot")
     @Disabled
     public class PushbotAutoDriveByTime_Linear extends LinearOpMode {
 
         /* Declare OpMode members. */
-        HardwarePushbot robot   = new HardwarePushbot();   // Use a Pushbot's hardware
+        HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
         private ElapsedTime runtime = new ElapsedTime();
 
+        static final double FORWARD_SPEED = 0.5;
+        static final double TURN_SPEED = 0.4;
 
-        static final double     FORWARD_SPEED = 0.6;
-        static final double     TURN_SPEED    = 0.5;
+        // Initialize motors and stuff
+        DcMotorEx leftFrontDrive = null;
+        DcMotorEx rightFrontDrive = null;
+        DcMotorEx leftBackDrive = null;
+        DcMotorEx rightBackDrive = null;
+        DcMotorEx carousel = null;
+        DcMotorEx arm = null;
+        Servo extender = null;
+        // initialize wheels
+        leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front");
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back");
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
+        carousel = hardwareMap.get(DcMotorEx.class, "carousel");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         @Override
         public void runOpMode() {
@@ -96,9 +113,15 @@ public class AtlAtl_Auton {
             // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
             // Step 1:  Drive forward for 3 seconds
-            robot.leftDrive.setPower(FORWARD_SPEED);
-            robot.rightDrive.setPower(FORWARD_SPEED);
-            runtime.reset();
+
+            public void driveForward(double power) {
+                leftFrontDrive.setPower(power);
+                rightFrontDrive.setPower(power);
+                leftBackDrive.setPower(power);
+                rightBackDrive.setPower(power);
+                runtime.reset();
+            }
+
             while (opModeIsActive() && (runtime.seconds() < 3.0)) {
                 telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
                 telemetry.update();
@@ -133,8 +156,5 @@ public class AtlAtl_Auton {
             sleep(1000);
         }
     }
-
-
-
-
 }
+
