@@ -164,7 +164,7 @@ public class AtlAtl_TeleOP extends OpMode
         double drive  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
         boolean carouselMoveLeft = gamepad1.left_bumper;
-        boolean armMove = gamepad2.right_bumper;
+        boolean armMove = gamepad2.right_bumper:
         boolean armMoveLeft = gamepad2.left_bumper;
         double extendermove = gamepad2.left_stick_x;
 
