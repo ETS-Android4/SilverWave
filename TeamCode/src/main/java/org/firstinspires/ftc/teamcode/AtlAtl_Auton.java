@@ -1,160 +1,165 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 
-    /* Copyright (c) 2017 FIRST. All rights reserved.
-     *
-     * Redistribution and use in source and binary forms, with or without modification,
-     * are permitted (subject to the limitations in the disclaimer below) provided that
-     * the following conditions are met:
-     *
-     * Redistributions of source code must retain the above copyright notice, this list
-     * of conditions and the following disclaimer.
-     *
-     * Redistributions in binary form must reproduce the above copyright notice, this
-     * list of conditions and the following disclaimer in the documentation and/or
-     * other materials provided with the distribution.
-     *
-     * Neither the name of FIRST nor the names of its contributors may be used to endorse or
-     * promote products derived from this software without specific prior written permission.
-     *
-     * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-     * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-     * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-     * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-     * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-     * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-     * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-     * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-     * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-     * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-     * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-     */
+/**
+ * This file contains an example of an iterative (Non-Linear) "OpMode".
+ * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
+ * The names of OpModes appear on the menu of the FTC Driver Station.
+ * When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all iterative OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ */
 
-//package org.firstinspires.ftc.robotcontroller.external.samples;
+@Autonomous(name="Arnav: AtlAtl_OP", group="Iterative Opmode")
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-public class AtlAtl_Auton {
-    /**
-     * This file illustrates the concept of driving a path based on time.
-     * It uses the common Pushbot hardware class to define the drive on the robot.
-     * The code is structured as a LinearOpMode
-     * <p>
-     * The code assumes that you do NOT have encoders on the wheels,
-     * otherwise you would use: PushbotAutoDriveByEncoder;
-     * <p>
-     * The desired path in this example is:
-     * - Drive forward for 3 seconds
-     * - Spin right for 1.3 seconds
-     * - Drive Backwards for 1 Second
-     * - Stop and close the claw.
-     * <p>
-     * The code is written in a simple form with no optimizations.
-     * However, there are several ways that this type of sequence could be streamlined,
-     * <p>
-     * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
-     * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
-     */
+public class AtlAtl_Auton extends LinearOpMode {
+    // Declare OpMode members.
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotorEx leftFrontDrive = null;
+    private DcMotorEx rightFrontDrive = null;
+    private DcMotorEx leftBackDrive = null;
+    private DcMotorEx rightBackDrive = null;
+    private DcMotorEx carousel = null;
+    private DcMotorEx arm = null;
+    //private Servo extender = null;
 
-    @Autonomous(name = "Pushbot: Auto Drive By Time", group = "Pushbot")
-    @Disabled
-    public class PushbotAutoDriveByTime_Linear extends LinearOpMode {
+    // servo initialization
+  //  public final static double EXTENDER_HOME = 0.0;  // starting position for extender, can be tuned later
+   // public final static double EXTENDER_MIN_RANGE = 0.0; // min position for servo
+    //public final static double EXTENDER_MAX_RANGE = 1.0; // max position for servo
 
-        /* Declare OpMode members. */
-        HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
-        private ElapsedTime runtime = new ElapsedTime();
 
-        static final double FORWARD_SPEED = 0.5;
-        static final double TURN_SPEED = 0.4;
+    @Override
+    public void runOpMode() throws InterruptedException {
 
-        // Initialize motors and stuff
-        DcMotorEx leftFrontDrive = null;
-        DcMotorEx rightFrontDrive = null;
-        DcMotorEx leftBackDrive = null;
-        DcMotorEx rightBackDrive = null;
-        DcMotorEx carousel = null;
-        DcMotorEx arm = null;
-        Servo extender = null;
-        // initialize wheels
-        leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front");
-        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
-        leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back");
-        rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
-        carousel = hardwareMap.get(DcMotorEx.class, "carousel");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
+            telemetry.addData("Status", "Initialized");
 
-        @Override
-        public void runOpMode() {
+            // Initialize the hardware variables. Note that the strings used here as parameters
+            // to 'get' must correspond to the names assigned during the robot configuration
+            // step (using the FTC Robot Controller app on the phone).
+            leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front");
+            rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
+            leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
+            rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
+            carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
+            arm = hardwareMap.get(DcMotorEx.class, "arm");
+            // Most robots need the motor on one side to be reversed to drive forward
+            // Reverse the motor that runs backwards when connected directly to the battery
 
-            /*
-             * Initialize the drive system variables.
-             * The init() method of the hardware class does all the work here
-             */
-            robot.init(hardwareMap);
+            rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+            leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+            rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+            leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+            carousel.setDirection(DcMotorEx.Direction.FORWARD);
+            arm.setDirection(DcMotorEx.Direction.FORWARD);
 
-            // Send telemetry message to signify robot waiting;
-            telemetry.addData("Status", "Ready to run");    //
-            telemetry.update();
-
-            // Wait for the game to start (driver presses PLAY)
+            // Tell the driver that initialization is complete.
+            telemetry.addData("Status", "Initialized");
+// robot code movement
             waitForStart();
-
-            // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
-
-            // Step 1:  Drive forward for 3 seconds
-
-            public void driveForward(double power) {
-                leftFrontDrive.setPower(power);
-                rightFrontDrive.setPower(power);
-                leftBackDrive.setPower(power);
-                rightBackDrive.setPower(power);
-                runtime.reset();
-            }
-
-            while (opModeIsActive() && (runtime.seconds() < 3.0)) {
-                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-
-            // Step 2:  Spin right for 1.3 seconds
-            robot.leftDrive.setPower(TURN_SPEED);
-            robot.rightDrive.setPower(-TURN_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-
-            // Step 3:  Drive Backwards for 1 Second
-            robot.leftDrive.setPower(-FORWARD_SPEED);
-            robot.rightDrive.setPower(-FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                telemetry.addData("Path", "Leg 3: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-
-            // Step 4:  Stop and close the claw.
-            robot.leftDrive.setPower(0);
-            robot.rightDrive.setPower(0);
-            robot.leftClaw.setPosition(1.0);
-            robot.rightClaw.setPosition(0.0);
-
-            telemetry.addData("Path", "Complete");
-            telemetry.update();
-            sleep(1000);
+            DriveForwardTime(1,4000);
+            TurnLeftTime(1,500);
         }
+    public void DriveForward(double power){
+        rightBackDrive.setPower(power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        leftFrontDrive.setPower(power);
+
+    }
+    public void DriveBackward(double power){
+        rightBackDrive.setPower(power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        leftFrontDrive.setPower(power);
+    }
+    public void turnRight(double power){
+        rightBackDrive.setPower(-power);
+        rightFrontDrive.setPower(-power);
+        leftBackDrive.setPower(power);
+        leftFrontDrive.setPower(power);
+    }
+    public void turnLeft(double power){
+        rightBackDrive.setPower(power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(-power);
+        leftFrontDrive.setPower(-power);
+    }
+    public void strafeRight(double power){
+        rightBackDrive.setPower(power);
+        rightFrontDrive.setPower(-power);
+        leftBackDrive.setPower(-power);
+        leftFrontDrive.setPower(power);
+    }
+    public void strafeLeft(double power){
+        rightBackDrive.setPower(-power);
+        rightFrontDrive.setPower(power);
+        leftBackDrive.setPower(-power);
+        leftFrontDrive.setPower(power);
+    }
+    public void carouselTurn(double power){
+        carousel.setPower(power);
+    }
+
+    public void DriveForwardTime(double power,long time) throws InterruptedException{
+        DriveForward(power);
+        Thread.sleep(time);
+    }
+    public void StopDriving(){
+        DriveForward(0);
+    }
+    public void TurnLeftTime(double power, long time) throws InterruptedException{
+        turnLeft(power);
+        Thread.sleep(time);
+
+    }
+    public void TurnRightTime(double power, long time) throws InterruptedException{
+        turnRight(power);
+        Thread.sleep((time));
     }
 }
-
