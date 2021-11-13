@@ -90,6 +90,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
         carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
+        extender = hardwareMap.get(Servo.class, "extender");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
@@ -99,6 +100,7 @@ public class AtlAtl_TeleOP extends OpMode
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
         arm.setDirection(DcMotorEx.Direction.FORWARD);
+        extender.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -110,6 +112,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
 
 
         // Setting and Initializing Servo Positions
@@ -151,7 +154,7 @@ public class AtlAtl_TeleOP extends OpMode
         double rightBackPower;
         double carouselPower;
         double armPower;
-        final double EXTENDER_SPEED = 0.01;
+
         // double carouselPowerDouble; --> not being used anywhere else in the code?
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -164,9 +167,10 @@ public class AtlAtl_TeleOP extends OpMode
         double drive  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
         boolean carouselMoveLeft = gamepad1.left_bumper;
-        boolean armMove = gamepad2.right_bumper;
-        boolean armMoveLeft = gamepad2.left_bumper;
-        double extendermove = gamepad2.left_stick_x;
+        double armMoveUp = gamepad2.left_stick_y;
+        double armMoveDown = gamepad2.left_stick_y;
+        boolean extenderOpen= gamepad2.left_bumper;
+        boolean extenderClose = gamepad2.right_bumper;
 
 
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
@@ -174,7 +178,13 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackPower    = drive + strafe + turn;
         rightFrontPower  = drive - strafe - turn;
         rightBackPower   = drive - strafe + turn;
-
+        armPower = 0;
+        if (armMoveUp > 0) {
+            armPower = armMoveUp;
+        }
+        else if (armMoveUp < 0){
+            armPower = armMoveDown;
+        }
         // Carousel True and False Conditions
         if(carouselMove) {
             carouselPower = 0.7;
@@ -186,16 +196,12 @@ public class AtlAtl_TeleOP extends OpMode
             carouselPower = 0;
         }
 
-        if(armMove) {
-            armPower = 0.7;
+        if (extenderOpen) {
+            extender.setPosition(EXTENDER_MAX_RANGE);
         }
-        else if(armMoveLeft) {
-            armPower = -0.7;
+        else if(extenderClose) {
+            extender.setPosition(EXTENDER_MIN_RANGE);
         }
-        else {
-            armPower = 0;
-        }
-
 
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
@@ -219,7 +225,14 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
         arm.setPower(armPower);
-        extender.setPosition(extendermove);
+        if (extenderClose) {
+            extender.setPosition(EXTENDER_MIN_RANGE);
+        }
+        else if (extenderOpen) {
+            extender.setPosition(EXTENDER_MAX_RANGE);
+        }
+
+
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
