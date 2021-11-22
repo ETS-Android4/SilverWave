@@ -64,6 +64,8 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx carousel = null;
+    private DcMotorEx intake = null;
+    private DcMotorEx outtakeLift = null;
 
 
 
@@ -93,6 +95,8 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
+        intake.setDirection(DcMotorEx.Direction.FORWARD);
+        outtakeLift.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -103,6 +107,9 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        outtakeLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
 
 
         //setting PID coefficients
@@ -139,6 +146,8 @@ public class AtlAtl_TeleOP extends OpMode
         double leftBackPower;
         double rightBackPower;
         double carouselPower;
+        double intakePower;
+        double outtakeLiftPower;
         // double carouselPowerDouble; --> not being used anywhere else in the code?
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -150,11 +159,14 @@ public class AtlAtl_TeleOP extends OpMode
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
+        boolean intakeMove = gamepad2.right_bumper;
+        double outtakeLiftMove = gamepad2.left_stick_y;
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
         leftFrontPower   = drive + strafe + turn;
         leftBackPower    = drive - strafe + turn;
         rightFrontPower  = drive - strafe - turn;
         rightBackPower   = drive + strafe - turn;
+        outtakeLiftPower = outtakeLiftMove;
 
 
         if(carouselMove) {
@@ -164,14 +176,19 @@ public class AtlAtl_TeleOP extends OpMode
             carouselPower = 0;
         }
 
+        if(intakeMove) {
+            intakePower = 0.8;
+        }
+        else {
+            intakePower = 0;
+        }
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
         if (maxValue > 1) {
             leftFrontPower /= maxValue;
-            // rightFrontPower /= maxValue;
+            rightFrontPower /= maxValue;
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
-            // carouselPower /= maxValue; --> not necessary
         }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -180,10 +197,11 @@ public class AtlAtl_TeleOP extends OpMode
 
         // Send calculated velocity to wheels
         leftFrontDrive.setPower(leftFrontPower);
-        //rightFrontDrive.setPower(rightFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
+        intake.setPower(intakePower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
