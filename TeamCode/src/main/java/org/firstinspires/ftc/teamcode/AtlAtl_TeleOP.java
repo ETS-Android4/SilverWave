@@ -202,6 +202,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
         intake.setPower(intakePower);
+        outtakeLift.setPower(outtakeLiftPower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
