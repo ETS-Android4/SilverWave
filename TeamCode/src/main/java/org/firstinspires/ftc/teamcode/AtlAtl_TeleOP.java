@@ -33,7 +33,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -65,13 +64,9 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx leftBackDrive = null;
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx carousel = null;
-    private DcMotorEx arm = null;
-    private Servo extender = null;
 
-    // servo initialization
-    public final static double EXTENDER_HOME = 0.0;  // starting position for extender, can be tuned later
-    public final static double EXTENDER_MIN_RANGE = 0.0; // min position for servo
-    public final static double EXTENDER_MAX_RANGE = 1.0; // max position for servo
+
+
 
 
     /*
@@ -88,8 +83,8 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
         leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
-        carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
+        carousel  = hardwareMap.get(DcMotorEx.class, "carousel1");
+
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
@@ -98,7 +93,6 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
-        arm.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -109,12 +103,7 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         carousel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-
-        // Setting and Initializing Servo Positions
-        extender = hardwareMap.servo.get("extender");
-        extender.setPosition(EXTENDER_HOME);
 
         //setting PID coefficients
         //leftFrontDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
@@ -150,8 +139,6 @@ public class AtlAtl_TeleOP extends OpMode
         double leftBackPower;
         double rightBackPower;
         double carouselPower;
-        double armPower;
-        final double EXTENDER_SPEED = 0.01;
         // double carouselPowerDouble; --> not being used anywhere else in the code?
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -159,53 +146,32 @@ public class AtlAtl_TeleOP extends OpMode
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double strafe = gamepad1.left_stick_y;
-        double turn = gamepad1.left_stick_x;
-        double drive  =  gamepad1.right_stick_x;
+        double strafe = gamepad1.left_stick_x;
+        double drive = gamepad1.left_stick_y;
+        double turn  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
-        boolean carouselMoveLeft = gamepad1.left_bumper;
-        boolean armMove = gamepad2.right_bumper:
-        boolean armMoveLeft = gamepad2.left_bumper;
-        double extendermove = gamepad2.left_stick_x;
-
-
         // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
-        leftFrontPower   = drive + strafe - turn;
-        leftBackPower    = drive + strafe + turn;
+        leftFrontPower   = drive + strafe + turn;
+        leftBackPower    = drive - strafe + turn;
         rightFrontPower  = drive - strafe - turn;
-        rightBackPower   = drive - strafe + turn;
+        rightBackPower   = drive + strafe - turn;
 
-        // Carousel True and False Conditions
+
         if(carouselMove) {
-            carouselPower = 0.7;
-        }
-        else if(carouselMoveLeft) {
-            carouselPower = -0.7;
+            carouselPower = 0.8;
         }
         else {
             carouselPower = 0;
         }
 
-        if(armMove) {
-            armPower = 0.7;
-        }
-        else if(armMoveLeft) {
-            armPower = -0.7;
-        }
-        else {
-            armPower = 0;
-        }
-
-
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
         if (maxValue > 1) {
             leftFrontPower /= maxValue;
-            rightFrontPower /= maxValue;
+            // rightFrontPower /= maxValue;
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
             // carouselPower /= maxValue; --> not necessary
-            armPower /= maxValue;
         }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -214,15 +180,13 @@ public class AtlAtl_TeleOP extends OpMode
 
         // Send calculated velocity to wheels
         leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
+        //rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
-        arm.setPower(armPower);
-        extender.setPosition(extendermove);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
+        //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
     }
 
     /*
@@ -233,3 +197,4 @@ public class AtlAtl_TeleOP extends OpMode
     }
 
 }
+//TEST Nikhil 18
