@@ -163,7 +163,7 @@ public class AtlAtl_TeleOP extends OpMode
         else {
             carouselPower = 0;
         }
-
+//
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
         if (maxValue > 1) {
