@@ -101,10 +101,10 @@ public class Auton_methods {
 
         }
         public void DriveBackward(double power){
-            rightBackDrive.setPower(power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(power);
-            leftFrontDrive.setPower(power);
+            rightBackDrive.setPower(-power);
+            rightFrontDrive.setPower(-power);
+            leftBackDrive.setPower(-power);
+            leftFrontDrive.setPower(-power);
         }
         public void turnRight(double power){
             rightBackDrive.setPower(-power);
@@ -127,14 +127,14 @@ public class Auton_methods {
         public void strafeLeft(double power){
             rightBackDrive.setPower(-power);
             rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(-power);
-            leftFrontDrive.setPower(power);
+            leftBackDrive.setPower(power);
+            leftFrontDrive.setPower(-power);
         }
         public void carouselTurn(double power){
             carousel.setPower(power);
         }
 
-        public void DriveForwardTime(double power,long time) throws InterruptedException{
+        public void DriveForwardTime(double power,long time) throws InterruptedException {
             DriveForward(power);
             Thread.sleep(time);
         }
