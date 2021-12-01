@@ -49,7 +49,7 @@ public class Auton_methods {
      * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
      */
 
-    @Autonomous(name="Arnav: AtlAtl_OP", group="Iterative Opmode")
+    @Autonomous(name="Arnav: AtlAtl_Time_BasedOP", group="Iterative Opmode")
 
     public static class AtlAtl_Auton extends LinearOpMode {
         // Declare OpMode members.
@@ -60,12 +60,6 @@ public class Auton_methods {
         private DcMotorEx rightBackDrive = null;
         private DcMotorEx carousel = null;
         private DcMotorEx arm = null;
-        //private Servo extender = null;
-
-        // servo initialization
-        //  public final static double EXTENDER_HOME = 0.0;  // starting position for extender, can be tuned later
-        // public final static double EXTENDER_MIN_RANGE = 0.0; // min position for servo
-        //public final static double EXTENDER_MAX_RANGE = 1.0; // max position for servo
 
 
         @Override

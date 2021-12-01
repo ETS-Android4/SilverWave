@@ -85,7 +85,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front");
         leftBackDrive  = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back");
-        carousel  = hardwareMap.get(DcMotorEx.class, "carousel1");
+        carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -95,8 +95,8 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
-        intake.setDirection(DcMotorEx.Direction.FORWARD);
-        outtakeLift.setDirection(DcMotorEx.Direction.FORWARD);
+        //intake.setDirection(DcMotorEx.Direction.FORWARD);
+        //outtakeLift.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -146,8 +146,8 @@ public class AtlAtl_TeleOP extends OpMode
         double leftBackPower;
         double rightBackPower;
         double carouselPower;
-        double intakePower;
-        double outtakeLiftPower;
+        //double intakePower;
+        //double outtakeLiftPower;
         // double carouselPowerDouble; --> not being used anywhere else in the code?
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -159,14 +159,14 @@ public class AtlAtl_TeleOP extends OpMode
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad1.right_bumper;
-        boolean intakeMove = gamepad2.right_bumper;
-        double outtakeLiftMove = gamepad2.left_stick_y;
-        // double CarouselMoveInt = (carouselMove) ? 1 : 0; --> don't need right now, gonna keep it here for later
+       // boolean intakeMove = gamepad2.right_bumper;
+        //double outtakeLiftMove = gamepad2.left_stick_y;
+        // double CarouselMoveInt = (carouselMove) ? 1 : 0; "--> don't need right now, gonna keep it here for later"
         leftFrontPower   = drive + strafe + turn;
         leftBackPower    = drive - strafe + turn;
         rightFrontPower  = drive - strafe - turn;
         rightBackPower   = drive + strafe - turn;
-        outtakeLiftPower = outtakeLiftMove;
+        //outtakeLiftPower = outtakeLiftMove;
 
 
         if(carouselMove) {
@@ -176,12 +176,12 @@ public class AtlAtl_TeleOP extends OpMode
             carouselPower = 0;
         }
 
-        if(intakeMove) {
-            intakePower = 0.8;
-        }
-        else {
-            intakePower = 0;
-        }
+        //if(intakeMove) {
+          //  intakePower = 0.8;
+        //}
+        //else {
+          //  intakePower = 0;
+        //}
         double maxValue = Math.max(Math.max(Math.abs(leftFrontPower),Math.abs(rightFrontPower)),Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
         if (maxValue > 1) {
@@ -201,8 +201,8 @@ public class AtlAtl_TeleOP extends OpMode
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
         carousel.setPower(carouselPower);
-        intake.setPower(intakePower);
-        outtakeLift.setPower(outtakeLiftPower);
+       // intake.setPower(intakePower);
+        //outtakeLift.setPower(outtakeLiftPower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
@@ -211,6 +211,7 @@ public class AtlAtl_TeleOP extends OpMode
     /*
      * Code to run ONCE after the driver hits STOP
      */
+    //Atlatl wuz here
     @Override
     public void stop() {
     }
