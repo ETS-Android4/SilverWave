@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Auton_methods;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -59,10 +61,10 @@ public class AtlAtl_Auton extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontDrive  = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor leftBackDrive  = null;
-    private DcMotor rightBackDrive = null;
+    private DcMotorEx leftFrontDrive  = null;
+    private DcMotorEx rightFrontDrive = null;
+    private DcMotorEx leftBackDrive  = null;
+    private DcMotorEx rightBackDrive = null;
 
 
     @Override
@@ -73,23 +75,24 @@ public class AtlAtl_Auton extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front_drive");
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
 
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFrontDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        leftBackDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
+
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -100,32 +103,70 @@ public class AtlAtl_Auton extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
+            double leftBackPower;
+            double leftFrontPower;
+            double rightBackPower;
+            double rightFrontPower;
 
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
+            public void DriveForwardDistance(double power, int distance) {
+                 // Reset Encoders
+                leftFrontDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+                leftBackDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+                rightFrontDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+                rightBackDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+                // Set target position
+                leftFrontDrive.setTargetPosition(distance);
+                leftBackDrive.setTargetPosition(distance);
+                rightFrontDrive.setTargetPosition(distance);
+                rightBackDrive.setTargetPosition(distance);
 
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
+                // Set to RUN_TO_POSITION mode
+                leftFrontDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                leftBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                rightFrontDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                rightBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+                // Setting PID coefficents
+                leftFrontDrive.setVelocityPIDFCoefficients(300,0,0,0);
+                leftBackDrive.setVelocityPIDFCoefficients(300,0,0,0);
+                rightFrontDrive.setVelocityPIDFCoefficients(300,0,0, 0);
+                leftFrontDrive.setVelocityPIDFCoefficients(300,0,0,0);
+
+                // Set drive power
+                Auton_methods methods = new Auton_methods(runtime, leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
+
+
+                methods.driveForward(800);
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
+
+
+
         }
     }
 }

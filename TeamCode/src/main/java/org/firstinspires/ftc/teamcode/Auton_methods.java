@@ -1,39 +1,45 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-public class Auton_methods {
-    /* Copyright (c) 2017 FIRST. All rights reserved.
-     *
-     * Redistribution and use in source and binary forms, with or without modification,
-     * are permitted (subject to the limitations in the disclaimer below) provided that
-     * the following conditions are met:
-     *
-     * Redistributions of source code must retain the above copyright notice, this list
-     * of conditions and the following disclaimer.
-     *
-     * Redistributions in binary form must reproduce the above copyright notice, this
-     * list of conditions and the following disclaimer in the documentation and/or
-     * other materials provided with the distribution.
-     *
-     * Neither the name of FIRST nor the names of its contributors may be used to endorse or
-     * promote products derived from this software without specific prior written permission.
-     *
-     * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-     * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-     * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-     * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-     * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-     * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-     * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-     * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-     * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-     * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-     * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-     */
+
 
     /**
      * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -51,7 +57,7 @@ public class Auton_methods {
 
     @Autonomous(name="Arnav: AtlAtl_Time_BasedOP", group="Iterative Opmode")
 
-    public static class AtlAtl_Auton extends LinearOpMode {
+    public static class Auton_methods extends LinearOpMode {
         // Declare OpMode members.
         private ElapsedTime runtime = new ElapsedTime();
         private DcMotorEx leftFrontDrive = null;
@@ -60,6 +66,24 @@ public class Auton_methods {
         private DcMotorEx rightBackDrive = null;
         private DcMotorEx carousel = null;
         private DcMotorEx arm = null;
+
+        public Auton_methods(ElapsedTime runtime,
+                             DcMotorEx leftFrontDrive,
+                             DcMotorEx rightFrontDrive,
+                             DcMotorEx leftBackDrive,
+                             DcMotorEx rightBackDrive)
+                              {
+
+            this.runtime = runtime;
+            this.leftFrontDrive = leftFrontDrive;
+            this.rightFrontDrive = rightFrontDrive;
+            this.leftBackDrive = leftBackDrive;
+            this.rightBackDrive = rightBackDrive;
+
+
+
+        }
+
 
 
         @Override
@@ -93,63 +117,71 @@ public class Auton_methods {
             DriveForwardTime(1,4000);
             TurnLeftTime(1,500);
         }
-        public void DriveForward(double power){
-            rightBackDrive.setPower(power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(power);
-            leftFrontDrive.setPower(power);
+        public void driveForward(double velocity){
+            rightBackDrive.setVelocity(velocity);
+            rightFrontDrive.setVelocity(velocity);
+            leftBackDrive.setVelocity(velocity);
+            leftFrontDrive.setVelocity(velocity);
 
         }
-        public void DriveBackward(double power){
-            rightBackDrive.setPower(-power);
-            rightFrontDrive.setPower(-power);
-            leftBackDrive.setPower(-power);
-            leftFrontDrive.setPower(-power);
+        public void driveBackward(double velocity){
+            rightBackDrive.setVelocity(-velocity);
+            rightFrontDrive.setVelocity(-velocity);
+            leftBackDrive.setVelocity(-velocity);
+            leftFrontDrive.setVelocity(-velocity);
         }
-        public void turnRight(double power){
-            rightBackDrive.setPower(-power);
-            rightFrontDrive.setPower(-power);
-            leftBackDrive.setPower(power);
-            leftFrontDrive.setPower(power);
+        public void turnRight(double velocity){
+            rightBackDrive.setVelocity(-velocity);
+            rightFrontDrive.setVelocity(-velocity);
+            leftBackDrive.setVelocity(velocity);
+            leftFrontDrive.setVelocity(velocity);
         }
-        public void turnLeft(double power){
-            rightBackDrive.setPower(power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(-power);
-            leftFrontDrive.setPower(-power);
+        public void turnLeft(double velocity){
+            rightBackDrive.setVelocity(velocity);
+            rightFrontDrive.setVelocity(velocity);
+            leftBackDrive.setVelocity(-velocity);
+            leftFrontDrive.setVelocity(-velocity);
         }
-        public void strafeRight(double power){
-            rightBackDrive.setPower(power);
-            rightFrontDrive.setPower(-power);
-            leftBackDrive.setPower(-power);
-            leftFrontDrive.setPower(power);
+        public void strafeRight(double velocity){
+            rightBackDrive.setVelocity(velocity);
+            rightFrontDrive.setVelocity(-velocity);
+            leftBackDrive.setVelocity(-velocity);
+            leftFrontDrive.setVelocity(velocity);
         }
-        public void strafeLeft(double power){
-            rightBackDrive.setPower(-power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(power);
-            leftFrontDrive.setPower(-power);
+        public void strafeLeft(double velocity){
+            rightBackDrive.setVelocity(-velocity);
+            rightFrontDrive.setVelocity(velocity);
+            leftBackDrive.setVelocity(velocity);
+            leftFrontDrive.setVelocity(-velocity);
         }
-        public void carouselTurn(double power){
-            carousel.setPower(power);
+        public void wait(double seconds) {
+            runtime.reset();
+            while(runtime.seconds() < seconds) {
+
+            }
         }
 
-        public void DriveForwardTime(double power,long time) throws InterruptedException {
-            DriveForward(power);
+
+        public void carouselTurn(double velocity){
+            carousel.setVelocity(velocity);
+        }
+
+        public void DriveForwardTime(double velocity,long time) throws InterruptedException {
+            this.driveForward(velocity);
             Thread.sleep(time);
         }
         public void StopDriving(){
-            DriveForward(0);
+            this.driveForward(0);
         }
-        public void TurnLeftTime(double power, long time) throws InterruptedException{
+        public void TurnLeftTime(double velocity, long time) throws InterruptedException{
             turnLeft(power);
             Thread.sleep(time);
 
         }
-        public void TurnRightTime(double power, long time) throws InterruptedException{
+        public void TurnRightTime(double velocity, long time) throws InterruptedException{
             turnRight(power);
             Thread.sleep((time));
         }
     }
-
 }
+
