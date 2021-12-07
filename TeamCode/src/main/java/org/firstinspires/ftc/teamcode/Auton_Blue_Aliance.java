@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -55,9 +55,9 @@ import org.firstinspires.ftc.teamcode.Auton_methods;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AtlAtl_Auton", group="Linear Opmode")
+@Autonomous(name="AtlAtl_Auton_Blue_Aliance", group="Linear Opmode")
 @Disabled
-public class AtlAtl_Auton extends LinearOpMode {
+public class Auton_Blue_Aliance extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -65,17 +65,19 @@ public class AtlAtl_Auton extends LinearOpMode {
     private DcMotorEx rightFrontDrive = null;
     private DcMotorEx leftBackDrive  = null;
     private DcMotorEx rightBackDrive = null;
+    private Auton_methods generalAutonMethods = new Auton_methods(runtime, leftFrontDrive, rightFrontDrive,
+            leftBackDrive, rightBackDrive);
 
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front_drive");
+        leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
@@ -85,14 +87,16 @@ public class AtlAtl_Auton extends LinearOpMode {
         rightFrontDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-
+        leftFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
-
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -103,70 +107,54 @@ public class AtlAtl_Auton extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftBackPower;
-            double leftFrontPower;
-            double rightBackPower;
-            double rightFrontPower;
+            double leftBackPower = 0.00;
+            double leftFrontPower = 0.00;
+            double rightBackPower = 0.00;
+            double rightFrontPower = 0.00;
 
-            public void DriveForwardDistance(double power, int distance) {
-                 // Reset Encoders
-                leftFrontDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
-                leftBackDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
-                rightFrontDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
-                rightBackDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
-
-                // Set target position
-                leftFrontDrive.setTargetPosition(distance);
-                leftBackDrive.setTargetPosition(distance);
-                rightFrontDrive.setTargetPosition(distance);
-                rightBackDrive.setTargetPosition(distance);
-
-                // Set to RUN_TO_POSITION mode
-                leftFrontDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                leftBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                rightFrontDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                rightBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
-                // Setting PID coefficents
-                leftFrontDrive.setVelocityPIDFCoefficients(300,0,0,0);
-                leftBackDrive.setVelocityPIDFCoefficients(300,0,0,0);
-                rightFrontDrive.setVelocityPIDFCoefficients(300,0,0, 0);
-                leftFrontDrive.setVelocityPIDFCoefficients(300,0,0,0);
-
-                // Set drive power
-                Auton_methods methods = new Auton_methods(runtime, leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-
-
-                methods.driveForward(800);
-
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
-
+            generalAutonMethods.DriveForwardTime(3500, 10);
+            generalAutonMethods.TurnRightTime(2000, 10);
+            generalAutonMethods.DriveForwardTime(3500, 10);
 
 
         }
+    }
+
+public void DriveForwardDistance(double power,int distance) {
+    // Reset Encoders
+    leftFrontDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+    leftBackDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+    rightFrontDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+    rightBackDrive.setMode(DcMotorEx.RunMode.RESET_ENCODERS);
+
+    // Set target position
+    leftFrontDrive.setTargetPosition(distance);
+    leftBackDrive.setTargetPosition(distance);
+    rightFrontDrive.setTargetPosition(distance);
+    rightBackDrive.setTargetPosition(distance);
+
+    // Set to RUN_TO_POSITION mode
+    leftFrontDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    leftBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    rightFrontDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    rightBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+    // Setting PID coefficents
+    leftFrontDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
+    leftBackDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
+    rightFrontDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
+    leftFrontDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
+
+    // Set drive power
+    Auton_methods methods = new Auton_methods(runtime, leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
+
+
+    methods.driveForward(800);
+
+
+    // Show the elapsed game time and wheel power.
+    telemetry.addData("Status", "Run Time: " + runtime.toString());
+    telemetry.addData("Motors", "left (%.2f), right (%.2f)");
+    telemetry.update();
     }
 }

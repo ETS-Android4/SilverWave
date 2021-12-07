@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
     @Autonomous(name="Arnav: AtlAtl_Time_BasedOP", group="Iterative Opmode")
 
-    public static class Auton_methods extends LinearOpMode {
+    public  class Auton_methods extends LinearOpMode {
         // Declare OpMode members.
         private ElapsedTime runtime = new ElapsedTime();
         private DcMotorEx leftFrontDrive = null;
@@ -66,7 +66,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
         private DcMotorEx rightBackDrive = null;
         private DcMotorEx carousel = null;
         private DcMotorEx arm = null;
-
         public Auton_methods(ElapsedTime runtime,
                              DcMotorEx leftFrontDrive,
                              DcMotorEx rightFrontDrive,
@@ -174,14 +173,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
             this.driveForward(0);
         }
         public void TurnLeftTime(double velocity, long time) throws InterruptedException{
-            turnLeft(power);
+            turnLeft(velocity);
             Thread.sleep(time);
 
         }
         public void TurnRightTime(double velocity, long time) throws InterruptedException{
-            turnRight(power);
+            turnRight(velocity);
             Thread.sleep((time));
         }
     }
-}
+
 
