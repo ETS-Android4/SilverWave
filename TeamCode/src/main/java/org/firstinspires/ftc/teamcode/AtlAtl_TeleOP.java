@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -68,8 +69,11 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx carousel = null;
     private DcMotorEx intake = null;
     private DcMotorEx outtakeLift = null;
+    private Servo box = null;
 
-
+    public final static double box_home = 0.0;
+    public final static double box_min_range = 0.0;
+    public final static double box_max_range = 1.0;
 
 
 
@@ -90,16 +94,19 @@ public class AtlAtl_TeleOP extends OpMode
         carousel  = hardwareMap.get(DcMotorEx.class, "carousel");
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         outtakeLift = hardwareMap.get(DcMotorEx.class, "outtakelift");
+        box = hardwareMap.get(Servo.class, "box");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
         rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+
         leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
         intake.setDirection(DcMotorEx.Direction.FORWARD);
         outtakeLift.setDirection(DcMotorEx.Direction.FORWARD);
+        box.setPosition(box_home);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -151,6 +158,7 @@ public class AtlAtl_TeleOP extends OpMode
         double carouselPower;
         double intakePower;
         double outtakeLiftPower;
+        double boxPower;
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
@@ -158,10 +166,11 @@ public class AtlAtl_TeleOP extends OpMode
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
         boolean carouselMove = gamepad2.right_bumper;
-        float intakeMoveIn = gamepad1.right_trigger;
-        float intakeMoveOut = gamepad1.left_trigger;
+        float intakeMoveIn = gamepad2.right_trigger;
+        float intakeMoveOut = gamepad2.left_trigger;
         boolean outtakeLiftMoveUp = gamepad2.dpad_up;
         boolean outtakeLiftMoveDown = gamepad2.dpad_down;
+        boolean boxMove = gamepad2.circle;
 
         leftFrontPower   = drive + strafe + turn;
         leftBackPower    = drive - strafe + turn;
@@ -184,6 +193,14 @@ public class AtlAtl_TeleOP extends OpMode
         else {
             carouselPower = 0;
         }
+        if(gamepad2.left_bumper) {
+            carouselPower = -0.8;
+        }
+
+        if(boxMove) {
+            boxPower = 1.0;
+
+        }
 
         if(outtakeLiftMoveUp) {
             outtakeLiftPower = 0.8;
@@ -204,6 +221,14 @@ public class AtlAtl_TeleOP extends OpMode
             leftBackPower /= maxValue;
             rightBackPower /= maxValue;
         }
+
+        if(gamepad1.dpad_down) {
+            leftFrontPower /= 0.6;
+            rightFrontPower /= 0.6;
+            leftBackPower /= 0.6;
+            rightBackPower /= 0.6;
+
+        }
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
         // leftPower  = -gamepad1.left_stick_y ;
@@ -218,7 +243,7 @@ public class AtlAtl_TeleOP extends OpMode
         intake.setPower(intakePower);
         outtakeLift.setPower(outtakeLiftPower);
         intake.setPower(intakePower);
-        //outtakeLift.setPower(outtakeLiftPower);
+        outtakeLift.setPower(outtakeLiftPower);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         //telemetry.addData("Motors", "left front (%.2f), right front (%.2f), left back (%.2f), right back (%.2f)", leftFrontDrive.getPower(), rightFrontDrive.getPower(), leftBackDrive.getPower(), rightBackDrive.getPower());
