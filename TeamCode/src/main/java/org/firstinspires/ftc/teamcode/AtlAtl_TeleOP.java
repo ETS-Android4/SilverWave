@@ -72,6 +72,7 @@ public class AtlAtl_TeleOP extends OpMode
     private Servo box = null;
 
     public final static double box_home = 0.0;
+    public final static double box_min_range = 0.0;
     public final static double box_max_range = 1.0;
 
 
@@ -173,10 +174,10 @@ public class AtlAtl_TeleOP extends OpMode
         boolean boxMoveHome = gamepad2.dpad_left;
         boolean boxMoveOut = gamepad2.dpad_right;
 
-        leftFrontPower   = drive + strafe + turn;
-        leftBackPower    = drive - strafe + turn;
-        rightFrontPower  = drive - strafe - turn;
-        rightBackPower   = drive + strafe - turn;
+        leftFrontPower   = -drive + strafe + turn;
+        leftBackPower    = drive + strafe - turn;
+        rightFrontPower  = -drive - strafe - turn;
+        rightBackPower   = -drive + strafe - turn;
         if (intakeMoveIn > 0){
             intakePower = 1;
         }
@@ -197,7 +198,7 @@ public class AtlAtl_TeleOP extends OpMode
         else{
             carouselPower = 0;
         }
-        if(gamepad2.left_bumper) {
+        if(carouselMoveLeft) {
             carouselPower = -0.8;
         }
 
