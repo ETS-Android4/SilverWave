@@ -72,7 +72,6 @@ public class AtlAtl_TeleOP extends OpMode
     private Servo box = null;
 
     public final static double box_home = 0.0;
-    public final static double box_min_range = 0.0;
     public final static double box_max_range = 1.0;
 
 
@@ -165,12 +164,14 @@ public class AtlAtl_TeleOP extends OpMode
         double strafe = gamepad1.left_stick_x;
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
-        boolean carouselMove = gamepad2.right_bumper;
+        boolean carouselMoveRight = gamepad2.right_bumper;
+        boolean carouselMoveLeft = gamepad2.left_bumper;
         float intakeMoveIn = gamepad2.right_trigger;
         float intakeMoveOut = gamepad2.left_trigger;
         boolean outtakeLiftMoveUp = gamepad2.dpad_up;
         boolean outtakeLiftMoveDown = gamepad2.dpad_down;
-        boolean boxMove = gamepad2.circle;
+        boolean boxMoveHome = gamepad2.dpad_left;
+        boolean boxMoveOut = gamepad2.dpad_right;
 
         leftFrontPower   = drive + strafe + turn;
         leftBackPower    = drive - strafe + turn;
@@ -187,21 +188,27 @@ public class AtlAtl_TeleOP extends OpMode
         }
 
 
-        if(carouselMove) {
+        if(carouselMoveRight) {
             carouselPower = 0.8;
         }
-        else {
+        else if (carouselMoveLeft){
+            carouselPower = -0.8;
+        }
+        else{
             carouselPower = 0;
         }
         if(gamepad2.left_bumper) {
             carouselPower = -0.8;
         }
 
-        if(boxMove) {
+        if(boxMoveHome) {
             boxPower = 1.0;
-
+            box.setPosition(box_home);
         }
-
+        else if (boxMoveOut){
+            boxPower = 1.0;
+            box.setPosition(box_max_range);
+        }
         if(outtakeLiftMoveUp) {
             outtakeLiftPower = 0.8;
         }
