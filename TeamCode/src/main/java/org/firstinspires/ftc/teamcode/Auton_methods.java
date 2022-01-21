@@ -55,7 +55,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
      * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
      */
 
-    @Autonomous(name="Arnav: AtlAtl_Time_BasedOP", group="Iterative Opmode")
+    @Autonomous(name="Arnav: AtlAtl_Time_Methods", group="Iterative Opmode")
 
     public  class Auton_methods extends LinearOpMode {
         // Declare OpMode members.

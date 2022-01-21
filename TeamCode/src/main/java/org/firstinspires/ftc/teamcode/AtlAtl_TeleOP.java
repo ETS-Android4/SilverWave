@@ -68,11 +68,10 @@ public class AtlAtl_TeleOP extends OpMode
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx carousel = null;
     private DcMotorEx intake = null;
-    private DcMotorEx outtakeLift = null;
+    private DcMotorEx outtagitkeLift = null;
     private Servo box = null;
 
     public final static double box_home = 0.0;
-    public final static double box_min_range = 0.0;
     public final static double box_max_range = 1.0;
 
 
@@ -174,15 +173,16 @@ public class AtlAtl_TeleOP extends OpMode
         boolean boxMoveHome = gamepad2.dpad_left;
         boolean boxMoveOut = gamepad2.dpad_right;
 
-        leftFrontPower   = -drive + strafe + turn;
-        leftBackPower    = drive + strafe - turn;
-        rightFrontPower  = -drive - strafe - turn;
-        rightBackPower   = -drive + strafe - turn;
+        leftFrontPower   = drive + strafe + turn;
+        leftBackPower    = drive - strafe + turn;
+        rightFrontPower  = drive - strafe - turn;
+        rightBackPower   = drive + strafe - turn;
         if (intakeMoveIn > 0){
             intakePower = 1;
         }
         else if(intakeMoveOut > 0){
             intakePower = -1;
+
         }
         else{
             intakePower = 0;
@@ -198,7 +198,7 @@ public class AtlAtl_TeleOP extends OpMode
         else{
             carouselPower = 0;
         }
-        if(carouselMoveLeft) {
+        if(gamepad2.left_bumper) {
             carouselPower = -0.8;
         }
 
@@ -237,6 +237,7 @@ public class AtlAtl_TeleOP extends OpMode
             rightBackPower /= 0.6;
 
         }
+
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
         // leftPower  = -gamepad1.left_stick_y ;
