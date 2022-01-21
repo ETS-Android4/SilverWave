@@ -112,7 +112,7 @@ public class AtlAtl_TeleOP extends OpMode
         outtakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         outtakeLift.setMode(DcMotor.RunMode.RESET_ENCODERS);
         outtakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        outtakeLift.setTargetPosition(2000000);
+        outtakeLift.setTargetPosition(20000);
 
 
         // Tell the driver that initialization is complete.
@@ -219,7 +219,7 @@ public class AtlAtl_TeleOP extends OpMode
         }
 
         if(outtakeLiftMoveUp) {
-            outtakeLift.setTargetPosition(600);
+            outtakeLift.setTargetPosition(200);
             outtakeLift.setPower(.5);
         }
         else if(outtakeLiftMoveDown) {
