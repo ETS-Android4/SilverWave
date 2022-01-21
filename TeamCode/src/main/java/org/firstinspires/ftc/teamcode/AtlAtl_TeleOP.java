@@ -188,10 +188,10 @@ public class AtlAtl_TeleOP extends OpMode
         rightBackPower   = -drive + strafe - turn;
 
         if (intakeMoveIn > 0){
-            intakePower = 1;
+            intakePower = .75;
         }
         else if(intakeMoveOut > 0){
-            intakePower = -1;
+            intakePower = -.75;
         }
         else{
             intakePower = 0;
