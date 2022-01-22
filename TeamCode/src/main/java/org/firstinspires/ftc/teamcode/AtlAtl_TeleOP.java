@@ -173,8 +173,8 @@ public class AtlAtl_TeleOP extends OpMode
         double strafe = gamepad1.left_stick_x;
         double drive = gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
-        boolean carouselMoveRight = gamepad2.right_bumper;
-        boolean carouselMoveLeft = gamepad2.left_bumper;
+        boolean carouselMoveRight = gamepad1.right_bumper;
+        boolean carouselMoveLeft = gamepad1.left_bumper;
         float intakeMoveIn = gamepad2.right_trigger;
         float intakeMoveOut = gamepad2.left_trigger;
         boolean outtakeLiftMoveUp = gamepad2.dpad_up;
