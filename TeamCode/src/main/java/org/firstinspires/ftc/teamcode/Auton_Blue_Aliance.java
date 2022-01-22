@@ -56,7 +56,6 @@ import org.firstinspires.ftc.teamcode.Auton_methods;
  */
 
 @Autonomous(name="AtlAtl_Auton_Blue_Aliance", group="Linear Opmode")
-@Disabled
 public class Auton_Blue_Aliance extends LinearOpMode {
 
     // Declare OpMode members.
@@ -102,19 +101,19 @@ public class Auton_Blue_Aliance extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        double leftBackPower = 0.00;
+        double leftFrontPower = 0.00;
+        double rightBackPower = 0.00;
+        double rightFrontPower = 0.00;
+        generalAutonMethods.DriveForwardTime(3500, 5);
+        generalAutonMethods.TurnRightTime(2000, 2);
+        generalAutonMethods.DriveForwardTime(3500, 2);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftBackPower = 0.00;
-            double leftFrontPower = 0.00;
-            double rightBackPower = 0.00;
-            double rightFrontPower = 0.00;
 
-            generalAutonMethods.DriveForwardTime(3500, 10);
-            generalAutonMethods.TurnRightTime(2000, 10);
-            generalAutonMethods.DriveForwardTime(3500, 10);
+
 
 
         }
@@ -140,10 +139,10 @@ public void DriveForwardDistance(double power,int distance) {
     rightBackDrive.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
     // Setting PID coefficents
-    leftFrontDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
-    leftBackDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
-    rightFrontDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
-    leftFrontDrive.setVelocityPIDFCoefficients(300, 0, 0, 0);
+    leftFrontDrive.setVelocityPIDFCoefficients(15, 0, 0, 0);
+    leftBackDrive.setVelocityPIDFCoefficients(15, 0, 0, 0);
+    rightFrontDrive.setVelocityPIDFCoefficients(15, 0, 0, 0);
+    leftFrontDrive.setVelocityPIDFCoefficients(15, 0, 0, 0);
 
     // Set drive power
     Auton_methods methods = new Auton_methods(runtime, leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);

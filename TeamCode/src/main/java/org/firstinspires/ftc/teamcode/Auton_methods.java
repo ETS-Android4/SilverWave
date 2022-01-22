@@ -59,13 +59,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
     public  class Auton_methods extends LinearOpMode {
         // Declare OpMode members.
-        private ElapsedTime runtime = new ElapsedTime();
-        private DcMotorEx leftFrontDrive = null;
-        private DcMotorEx rightFrontDrive = null;
-        private DcMotorEx leftBackDrive = null;
-        private DcMotorEx rightBackDrive = null;
-        private DcMotorEx carousel = null;
-        private DcMotorEx arm = null;
+        public ElapsedTime runtime = new ElapsedTime();
+        public DcMotorEx leftFrontDrive = null;
+        public DcMotorEx rightFrontDrive = null;
+        public DcMotorEx leftBackDrive = null;
+        public DcMotorEx rightBackDrive = null;
+        public DcMotorEx carousel = null;
+        public DcMotorEx arm = null;
         public Auton_methods(ElapsedTime runtime,
                              DcMotorEx leftFrontDrive,
                              DcMotorEx rightFrontDrive,
