@@ -109,6 +109,11 @@ public class AtlAtl_TeleOP extends OpMode
         outtakeLift.setDirection(DcMotorEx.Direction.FORWARD);
         box.setPosition(box_home);
 
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         outtakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         outtakeLift.setMode(DcMotor.RunMode.RESET_ENCODERS);
         outtakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -223,7 +228,7 @@ public class AtlAtl_TeleOP extends OpMode
             outtakeLift.setPower(.5);
         }
         else if(outtakeLiftMoveDown) {
-            outtakeLift.setTargetPosition(-800);
+            outtakeLift.setTargetPosition(-600);
             outtakeLift.setPower(-.5);
         }
         else{
@@ -253,11 +258,11 @@ public class AtlAtl_TeleOP extends OpMode
         // rightPower = -gamepad1.right_stick_y ;
 
         // Send calculated velocity to wheels
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
-        carousel.setPower(carouselPower);
+        leftFrontDrive.setVelocity(leftFrontPower);
+        rightFrontDrive.setVelocity(rightFrontPower);
+        leftBackDrive.setVelocity(leftBackPower);
+        rightBackDrive.setVelocity(rightBackPower);
+        carousel.setVelocity(carouselPower);
 
         intake.setPower(intakePower);
         intake.setPower(intakePower);
