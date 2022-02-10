@@ -48,7 +48,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
  * The names of OpModes appear on the menu of the FTC Driver Station.
  * When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ *.
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all iterative OpModes contain.
  *
@@ -107,8 +107,9 @@ public class AtlAtl_TeleOP extends OpMode
         carousel.setDirection(DcMotorEx.Direction.FORWARD);
         intake.setDirection(DcMotorEx.Direction.FORWARD);
         outtakeLift.setDirection(DcMotorEx.Direction.FORWARD);
-        box.setPosition(box_home);
 
+        box.setPosition(box_home);
+        carousel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         outtakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         outtakeLift.setMode(DcMotor.RunMode.RESET_ENCODERS);
         outtakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -199,10 +200,10 @@ public class AtlAtl_TeleOP extends OpMode
 
 
         if(carouselMoveRight) {
-            carouselPower = 0.8;
+            carouselPower = 700;
         }
         else if (carouselMoveLeft){
-            carouselPower = -0.8;
+            carouselPower = -700;
         }
         else{
             carouselPower = 0;
@@ -257,7 +258,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
-        carousel.setPower(carouselPower);
+        carousel.setVelocity(carouselPower);
 
         intake.setPower(intakePower);
         intake.setPower(intakePower);

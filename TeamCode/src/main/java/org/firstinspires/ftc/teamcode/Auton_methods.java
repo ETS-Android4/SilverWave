@@ -161,8 +161,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
         }
 
 
-        public void carouselTurn(double velocity){
+        public void carouselTurn(double velocity, long time) throws  InterruptedException{
+
             carousel.setVelocity(velocity);
+            Thread.sleep(time);
         }
 
         public void DriveForwardTime(double velocity,long time) throws InterruptedException {
