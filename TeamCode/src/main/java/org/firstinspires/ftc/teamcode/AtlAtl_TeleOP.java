@@ -135,7 +135,7 @@ public class AtlAtl_TeleOP extends OpMode
         //rightFrontDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
         //leftBackDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
         //rightBackDrive.setVelocityPIDFCoefficients(30, 0, 0, 0);
-
+          carousel.setVelocityPIDFCoefficients(30,0,0,0);
     }
 
     /*
@@ -163,7 +163,7 @@ public class AtlAtl_TeleOP extends OpMode
         double rightFrontPower;
         double leftBackPower;
         double rightBackPower;
-        double carouselPower;
+        double carouselVelocity;
         double intakePower;
         double outtakeLiftPower;
 
@@ -200,16 +200,13 @@ public class AtlAtl_TeleOP extends OpMode
 
 
         if(carouselMoveRight) {
-            carouselPower = 700;
+            carouselVelocity = 3000;
         }
         else if (carouselMoveLeft){
-            carouselPower = -700;
+            carouselPower = -3000;
         }
         else{
             carouselPower = 0;
-        }
-        if(carouselMoveLeft) {
-            carouselPower = -0.8;
         }
 
         if(boxMoveHome) {
@@ -258,7 +255,7 @@ public class AtlAtl_TeleOP extends OpMode
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
-        carousel.setVelocity(carouselPower);
+        carousel.setVelocity(carouselVelocity);
 
         intake.setPower(intakePower);
         intake.setPower(intakePower);
@@ -273,4 +270,3 @@ public class AtlAtl_TeleOP extends OpMode
     }
 //
 }
-
