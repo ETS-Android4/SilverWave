@@ -22,6 +22,9 @@ public class SilverWave_TeleOp extends OpMode
     private Servo leftProp = null;
     private Servo rightProp = null; 
     
+    double rightPower;
+    double leftPower;
+    
     
 
 
@@ -37,7 +40,8 @@ public class SilverWave_TeleOp extends OpMode
 
      
 
-        box.setPosition(box_home);
+        rightProp.setDirection(Servo.Direction(FORWARD))
+        leftProp.setDirection(Servo.Direction(FORWARD))
 
 
 
@@ -64,6 +68,23 @@ public class SilverWave_TeleOp extends OpMode
      */
     @Override
     public void loop() {
+    double j_LeftY = gamepad1.left_stick_y;
+    double j_RightY = gamepad1.right_stick_y;
+    
+    rightPower = j_RightY/2 + 0.5;
+    leftPower = j_LeftY/2 + 0.5;
+   
+   rightProp.setPosition(rightPower);
+   leftProp.setPosition(leftPower);
+    
+    
+    
+    telemetry.addData("Right Servo Direction", rightProp.getDirection());
+    telemetry.addData("Right Power", rightPower);
+    telemetry.addData("Left Power", leftPower);
+    telemetry.update();
+
+
     
 }
     @Override
