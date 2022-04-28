@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@TeleOp(name="SilverWave TeleOp group="Iterative Opmode")
+@TeleOp(name="SilverWave TeleOp", group="Iterative Opmode")
 
 public class SilverWave_TeleOp extends OpMode
 {
@@ -40,8 +39,8 @@ public class SilverWave_TeleOp extends OpMode
 
      
 
-        rightProp.setDirection(Servo.Direction(FORWARD))
-        leftProp.setDirection(Servo.Direction(FORWARD))
+    //    rightProp.setDirection(Servo.Direction(FORWARD));
+    //    leftProp.setDirection(Servo.Direction(FORWARD));
 
 
 
@@ -91,4 +90,3 @@ public class SilverWave_TeleOp extends OpMode
     public void stop() {
     }
 //
-}
